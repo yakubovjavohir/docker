@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  my_mongodb:
+    image: mongo:4.2.3-bionic
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_DB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_PASSWORD}
+    
+    
+  redis:
+    image: redis:7.4.2-alpine
+    restart: always
+    ports:
+      - 6379:6379
+
+
+  app:
+    container_name: dock_edu
+    build: .
+    env_file: .env
+    ports:
+      - 7777:3000
+    depends_on:
+    - my_mongodb
